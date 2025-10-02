@@ -10,6 +10,7 @@ export default function DoctorRegistration() {
     username: "",
     password: "",
     image: "",
+    role: "doctor", // Add this default
   });
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
@@ -64,11 +65,11 @@ export default function DoctorRegistration() {
     }
 
     if (isEditing) {
-      const updated = doctors.map((doc) => (doc.id === formData.id ? formData : doc));
+      const updated = doctors.map((doc) => (doc.id === formData.id ? { ...formData, role: "doctor" } : doc));
       setDoctors(updated);
       setIsEditing(false);
     } else {
-      setDoctors([...doctors, { ...formData, id: Date.now() }]);
+      setDoctors([...doctors, { ...formData, id: Date.now(), role: "doctor" }]);
     }
 
     setFormData({
@@ -78,13 +79,16 @@ export default function DoctorRegistration() {
       username: "",
       password: "",
       image: "",
+      role: "doctor",
     });
     e.target.reset();
   };
 
   const handleEdit = (id) => {
     const doc = doctors.find((d) => d.id === id);
-    setFormData(doc);
+    if (doc) {
+      setFormData({ ...doc, role: "doctor" }); // Ensure role is set
+    }
     setIsEditing(true);
     setError(null);
   };

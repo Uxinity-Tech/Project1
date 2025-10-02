@@ -48,6 +48,9 @@ export default function DoctorSidebar({ children }) {
     );
   }
 
+  // Default profile image URL (you can replace this with your own default avatar URL)
+  const defaultProfileImage = "https://via.placeholder.com/40x40/3B82F6/FFFFFF?text=DP"; // Example default avatar
+
   return (
     <div className="relative min-h-screen">
       {/* Hamburger button for mobile */}
@@ -125,16 +128,15 @@ export default function DoctorSidebar({ children }) {
             }`}
           >
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-teal-200 flex items-center justify-center mr-3">
-                {user.image ? (
-                  <img
-                    src={user.image}
-                    alt={`${user.name || "Doctor"}'s profile`}
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  <FaUserCircle className="text-xl text-teal-600" />
-                )}
+              <div className="w-10 h-10 rounded-full bg-teal-200 flex items-center justify-center mr-3 overflow-hidden">
+                <img
+                  src={user.image || defaultProfileImage}
+                  alt={`${user.name || "Doctor"}'s profile`}
+                  className="w-full h-full rounded-full object-cover"
+                  onError={(e) => {
+                    e.target.src = defaultProfileImage; // Fallback to default if image fails to load
+                  }}
+                />
               </div>
               {!isCollapsed && (
                 <div>

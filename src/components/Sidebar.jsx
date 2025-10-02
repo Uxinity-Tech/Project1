@@ -84,8 +84,8 @@ export default function Sidebar({ children }) {
         aria-label="Sidebar"
       >
         <div className="flex flex-col h-full justify-between p-6">
-          <div>
-            <div className="flex items-center justify-between mb-8">
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center justify-between mb-8 flex-shrink-0">
               {!isCollapsed && (
                 <h1 className="text-3xl font-extrabold text-teal-600 tracking-tight">
                   DentalCare
@@ -100,49 +100,57 @@ export default function Sidebar({ children }) {
               </button>
             </div>
 
-            <ul className="space-y-3">
-              {Object.entries(groupedLinks).map(([group, groupLinks]) => (
-                <li key={group}>
-                  {!isCollapsed && (
-                    <button
-                      onClick={() => toggleGroup(group)}
-                      className="w-full text-left text-sm font-semibold text-gray-600 mb-2 flex items-center"
-                    >
-                      {group}
-                      <span className={`ml-2 transform transition-transform duration-200 ${expandedGroup === group ? "rotate-90" : ""}`}>
-                        {expandedGroup === group ? "▼" : "▶"}
-                      </span>
-                    </button>
-                  )}
-                  {(isCollapsed || expandedGroup === group || group === "Main") && (
-                    <ul className="space-y-2">
-                      {groupLinks.map((link) => (
-                        <li key={link.path} className="relative group">
-                          <Link
-                            to={link.path}
-                            className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 text-sm ${
-                              location.pathname === link.path
-                                ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md"
-                                : "text-gray-700 hover:bg-teal-100"
-                            } ${isCollapsed ? "justify-center" : ""}`}
-                            aria-current={location.pathname === link.path ? "page" : undefined}
-                            onClick={() => setIsMobileOpen(false)}
-                          >
-                            <span className="text-xl">{link.icon}</span>
-                            {!isCollapsed && <span className="ml-3 font-medium">{link.name}</span>}
-                          </Link>
-                          {isCollapsed && (
-                            <div className="absolute left-full ml-2 hidden group-hover:block bg-teal-600 text-white text-xs rounded-lg py-1 px-2 shadow-lg z-10">
-                              {link.name}
-                            </div>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <div 
+              className="flex-1 overflow-y-auto pl-2" 
+              style={{ direction: 'rtl' }}
+            >
+              <ul 
+                className="space-y-3" 
+                style={{ direction: 'ltr' }}
+              >
+                {Object.entries(groupedLinks).map(([group, groupLinks]) => (
+                  <li key={group}>
+                    {!isCollapsed && (
+                      <button
+                        onClick={() => toggleGroup(group)}
+                        className="w-full text-left text-sm font-semibold text-gray-600 mb-2 flex items-center"
+                      >
+                        {group}
+                        <span className={`ml-2 transform transition-transform duration-200 ${expandedGroup === group ? "rotate-90" : ""}`}>
+                          {expandedGroup === group ? "▼" : "▶"}
+                        </span>
+                      </button>
+                    )}
+                    {(isCollapsed || expandedGroup === group || group === "Main") && (
+                      <ul className="space-y-2">
+                        {groupLinks.map((link) => (
+                          <li key={link.path} className="relative group">
+                            <Link
+                              to={link.path}
+                              className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 text-sm ${
+                                location.pathname === link.path
+                                  ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md"
+                                  : "text-gray-700 hover:bg-teal-100"
+                              } ${isCollapsed ? "justify-center" : ""}`}
+                              aria-current={location.pathname === link.path ? "page" : undefined}
+                              onClick={() => setIsMobileOpen(false)}
+                            >
+                              <span className="text-xl">{link.icon}</span>
+                              {!isCollapsed && <span className="ml-3 font-medium">{link.name}</span>}
+                            </Link>
+                            {isCollapsed && (
+                              <div className="absolute left-full ml-2 hidden group-hover:block bg-teal-600 text-white text-xs rounded-lg py-1 px-2 shadow-lg z-10">
+                                {link.name}
+                              </div>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className={`p-4 bg-teal-50 rounded-2xl shadow-inner ${isCollapsed ? "text-center" : ""}`}>

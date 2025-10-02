@@ -32,7 +32,8 @@ export default function LoginAdmin() {
           (doc) => doc.username === username && doc.password === password
         );
         if (foundDoctor) {
-          login("doctor", { name: foundDoctor.name, id: foundDoctor.id });
+          // FIXED: Pass the full doctor object to include image, specialization, etc.
+          login("doctor", foundDoctor);
           navigate("/dashboard");
           return;
         }

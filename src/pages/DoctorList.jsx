@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaUserPlus } from "react-icons/fa";
 
 export default function DoctorList() {
   const [doctors, setDoctors] = useState([]);
@@ -25,44 +26,59 @@ export default function DoctorList() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Doctor List</h2>
+    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white p-8">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-4xl font-extrabold text-teal-700 mb-10 tracking-tight">
+          Doctor List
+        </h2>
 
-      <table className="w-full bg-white rounded shadow">
-        <thead>
-          <tr className="bg-pink-100">
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Specialization</th>
-            <th className="p-2 text-left">Username</th>
-            <th className="p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {doctors.map((doc) => (
-            <tr key={doc.id} className="border-t">
-              <td className="p-2">{doc.name}</td>
-              <td className="p-2">{doc.specialization}</td>
-              <td className="p-2">{doc.username}</td>
-              <td className="p-2 space-x-2">
-                {/* Optional Edit Button if you want to navigate to registration with edit pre-filled */}
+        {doctors.length === 0 ? (
+          <p className="text-gray-500 text-center text-lg font-medium">
+            No doctors registered yet.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {doctors.map((doc) => (
+              <div
+                key={doc.id}
+                className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
+              >
+                <div className="flex items-center mb-4">
+                  {doc.image ? (
+                    <img
+                      src={doc.image}
+                      alt={`${doc.name}'s profile`}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-teal-200 mr-4"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center mr-4">
+                      <FaUserPlus className="text-teal-500 text-2xl" />
+                    </div>
+                  )}
+                  <div>
+                    <h4 className="text-xl font-bold text-teal-600">
+                      {doc.name}
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      <strong>Specialization:</strong> {doc.specialization}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  <strong>Username:</strong> {doc.username}
+                </p>
                 <button
-                  className="text-red-600 hover:underline"
                   onClick={() => handleDelete(doc.id)}
+                  className="flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200"
                 >
+                  <FaUserPlus className="mr-2 text-lg" />
                   Delete
                 </button>
-              </td>
-            </tr>
-          ))}
-          {doctors.length === 0 && (
-            <tr>
-              <td colSpan="4" className="text-center py-4 text-gray-500">
-                No doctors registered.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
