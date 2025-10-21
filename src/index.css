@@ -22,8 +22,11 @@
 
   body {
     font-family: "Inter", system-ui, sans-serif;
+    background-color: #ffffff !important; /* ✅ Forces white background */
+    color: #000000; /* optional: ensures text is visible */
   }
 }
+
 
 @layer components {
   .btn-primary {

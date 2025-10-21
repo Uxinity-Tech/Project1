@@ -31,5 +31,6 @@ export default {
       },
     },
   },
+  darkMode: 'class', // ✅ ADD THIS LINE
   plugins: [],
 };
