@@ -10,7 +10,7 @@ export default function DoctorRegistration() {
     username: "",
     password: "",
     image: "",
-    role: "doctor", // Add this default
+    role: "doctor",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
@@ -87,7 +87,7 @@ export default function DoctorRegistration() {
   const handleEdit = (id) => {
     const doc = doctors.find((d) => d.id === id);
     if (doc) {
-      setFormData({ ...doc, role: "doctor" }); // Ensure role is set
+      setFormData({ ...doc, role: "doctor" });
     }
     setIsEditing(true);
     setError(null);
@@ -99,7 +99,7 @@ export default function DoctorRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-gray-900 dark:to-gray-800 p-8 font-sans">
+    <div className="min-h-screen bg-white dark:bg-gray-900 p-8 font-sans">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-extrabold text-teal-700 dark:text-teal-300 mb-10 tracking-tight">
           Doctor Registration
