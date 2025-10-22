@@ -22,11 +22,8 @@
 
   body {
     font-family: "Inter", system-ui, sans-serif;
-    background-color: #ffffff !important; /* ✅ Forces white background */
-    color: #000000; /* optional: ensures text is visible */
   }
 }
-
 
 @layer components {
   .btn-primary {
@@ -84,3 +81,8 @@
     margin-right: auto;
   }
 }
+.main {
+  /* padding: calc(var(--spacing) * 4); */  /* disabled */
+  padding: 0; /* or set to none */
+}
+

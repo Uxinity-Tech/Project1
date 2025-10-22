@@ -31,80 +31,94 @@ import AppointmentForm from "./components/AppointmentForm";
 import BillingTable from "./components/BillingTable";
 
 // Login Page
-import LoginAdmin from "./Log/LoginAdmin";
+import LoginAdmin from "./Log/LoginAdmin"; // Fixed typo: "./Log" → make sure path is correct
 
+// ✅ Protected Layout for Authenticated Users
+function ProtectedLayout({ children }) {
+  const { user } = useAuth();
+  return (
+    <div className="flex">
+      {user.role === "admin" ? <Sidebar /> : <DoctorSidebar />}
+      <main className="flex-1 bg-gray-50 min-h-screen p-6 overflow-y-auto">
+        {children}
+      </main>
+    </div>
+  );
+}
 
 // ✅ Routes Wrapper Component
 function AppRoutes() {
   const { user, setUser } = useAuth();
 
-  // ✅ Persist user in localStorage
+  // ✅ Load user from localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser && !user) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Failed to parse stored user", error);
+        localStorage.removeItem("user");
+      }
     }
   }, [user, setUser]);
 
+  // ✅ If no user → Force login
   if (!user) {
     return (
       <Routes>
-        {/* Default load → redirect to login */}
-        <Route path="/" element={<Navigate to="/login-admin" replace />} />
         <Route path="/login-admin" element={<LoginAdmin />} />
         <Route path="*" element={<Navigate to="/login-admin" replace />} />
       </Routes>
     );
   }
 
+  // ✅ User is logged in → Show protected routes
   return (
-    <div className="flex">
-      {user.role === "admin" ? <Sidebar /> : <DoctorSidebar />}
-      <main className="flex-1 bg-gray-50 min-h-screen p-6 overflow-y-auto">
-        <Routes>
-          {/* ---------------- ADMIN ROUTES ---------------- */}
-          {user.role === "admin" && (
-            <>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/doctor-registration" element={<DoctorRegistration />} />
-              <Route path="/patients" element={<Patients />} />
-              <Route path="/doctor" element={<DoctorList />} />
-              <Route path="/admin-prescriptions" element={<AdminPrescription />} />
-              <Route path="/appointments" element={<Appointments />} />
-              <Route path="/billing" element={<Billing />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/add-patient" element={<PatientForm />} />
-              <Route path="/new-appointment" element={<AppointmentForm />} />
-              <Route path="/view-bill" element={<BillingTable />} />
-              <Route path="/inventory" element={<Inventory />} />
-            </>
-          )}
+    <ProtectedLayout>
+      <Routes>
+        {/* ---------------- ADMIN ROUTES ---------------- */}
+        {user.role === "admin" && (
+          <>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/doctor-registration" element={<DoctorRegistration />} />
+            <Route path="/patients" element={<Patients />} />
+            <Route path="/doctor" element={<DoctorList />} />
+            <Route path="/admin-prescriptions" element={<AdminPrescription />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/billing" element={<Billing />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/add-patient" element={<PatientForm />} />
+            <Route path="/new-appointment" element={<AppointmentForm />} />
+            <Route path="/view-bill" element={<BillingTable />} />
+            <Route path="/inventory" element={<Inventory />} />
+          </>
+        )}
 
-          {/* ---------------- DOCTOR ROUTES ---------------- */}
-          {user.role === "doctor" && (
-            <>
-              <Route path="/dashboard" element={<DoctorDashboard />} />
-              <Route path="/patient-list" element={<PatientList />} />
-              <Route path="/patient-details/:id" element={<PatientDetails />} />
-              <Route path="/appointments" element={<AppointmentSchedule />} />
-              <Route path="/consultation" element={<ConsultationForm />} />
-              <Route path="/prescription" element={<PrescriptionPage />} />
-              <Route path="/followups" element={<FollowUpList />} />
-              <Route path="/inventory" element={<Inventory />} />
-            </>
-          )}
+        {/* ---------------- DOCTOR ROUTES ---------------- */}
+        {user.role === "doctor" && (
+          <>
+            <Route path="/dashboard" element={<DoctorDashboard />} />
+            <Route path="/patient-list" element={<PatientList />} />
+            <Route path="/patient-details/:id" element={<PatientDetails />} />
+            <Route path="/appointments" element={<AppointmentSchedule />} />
+            <Route path="/consultation" element={<ConsultationForm />} />
+            <Route path="/prescription" element={<PrescriptionPage />} />
+            <Route path="/followups" element={<FollowUpList />} />
+            <Route path="/inventory" element={<Inventory />} />
+          </>
+        )}
 
-          {/* Default redirect */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </main>
-    </div>
+        {/* Default redirect to dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </ProtectedLayout>
   );
 }
 
-
-// ✅ Main App Wrapper
+// ✅ Main App
 export default function App() {
   return (
     <AuthProvider>
