@@ -1,13 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
 import { InventoryProvider } from './context/InventoryContext.jsx';
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from './context/AuthContext'; // ← IMPORT THIS
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <InventoryProvider>
-    <App />
-    </InventoryProvider>
-  </StrictMode>,
-)
+    <AuthProvider>                     {/* ← WRAP WITH AUTH */}
+      <InventoryProvider>             {/* ← THEN INVENTORY */}
+        <App />
+      </InventoryProvider>
+    </AuthProvider>
+  </StrictMode>
+);
