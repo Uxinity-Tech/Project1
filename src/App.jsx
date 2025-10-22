@@ -31,9 +31,9 @@ import AppointmentForm from "./components/AppointmentForm";
 import BillingTable from "./components/BillingTable";
 
 // Login Page
-import LoginAdmin from "./Log/LoginAdmin"; // Fixed typo: "./Log" → make sure path is correct
+import LoginAdmin from "./Log/LoginAdmin";
 
-// ✅ Protected Layout for Authenticated Users
+// Protected Layout
 function ProtectedLayout({ children }) {
   const { user } = useAuth();
   return (
@@ -46,38 +46,28 @@ function ProtectedLayout({ children }) {
   );
 }
 
-// ✅ Routes Wrapper Component
+// AppRoutes
 function AppRoutes() {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
 
-  // ✅ Load user from localStorage on mount
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser && !user) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error("Failed to parse stored user", error);
-        localStorage.removeItem("user");
-      }
-    }
-  }, [user, setUser]);
+  // NO localStorage load → forces logout on refresh
+  // Remove useEffect that loads from localStorage
 
-  // ✅ If no user → Force login
   if (!user) {
     return (
       <Routes>
+        {/* Default: Login */}
+        <Route path="/" element={<LoginAdmin />} />
         <Route path="/login-admin" element={<LoginAdmin />} />
-        <Route path="*" element={<Navigate to="/login-admin" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
   }
 
-  // ✅ User is logged in → Show protected routes
   return (
     <ProtectedLayout>
       <Routes>
-        {/* ---------------- ADMIN ROUTES ---------------- */}
+        {/* ADMIN ROUTES */}
         {user.role === "admin" && (
           <>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -96,7 +86,7 @@ function AppRoutes() {
           </>
         )}
 
-        {/* ---------------- DOCTOR ROUTES ---------------- */}
+        {/* DOCTOR ROUTES */}
         {user.role === "doctor" && (
           <>
             <Route path="/dashboard" element={<DoctorDashboard />} />
@@ -110,7 +100,7 @@ function AppRoutes() {
           </>
         )}
 
-        {/* Default redirect to dashboard */}
+        {/* Default redirect */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
@@ -118,7 +108,7 @@ function AppRoutes() {
   );
 }
 
-// ✅ Main App
+// Main App
 export default function App() {
   return (
     <AuthProvider>

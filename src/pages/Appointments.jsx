@@ -14,7 +14,6 @@ export default function Appointments() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Load data from localStorage
     const savedAppointments = JSON.parse(localStorage.getItem("appointments")) || [];
     const savedDoctors = JSON.parse(localStorage.getItem("doctors")) || [];
     const savedPatients = JSON.parse(localStorage.getItem("patients")) || [];
@@ -51,25 +50,22 @@ export default function Appointments() {
     };
 
     setAppointments([...appointments, newAppointment]);
-
-    // Reset form
     setForm({ date: "", time: "", doctorId: "", patientId: "" });
   };
 
   const handleDelete = (id) => {
-    const filtered = appointments.filter((a) => a.id !== id);
-    setAppointments(filtered);
+    setAppointments(appointments.filter((a) => a.id !== id));
   };
 
   return (
     <div className="min-h-screen bg-white p-8 font-sans">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-teal-700 dark:text-teal-300 mb-10 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-teal-700 mb-10 tracking-tight">
           Schedule Appointments
         </h2>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-300 rounded-xl flex items-center shadow-sm">
+          <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center shadow-sm">
             <FaTrash className="mr-3 text-lg" />
             <span className="text-sm font-medium">{error}</span>
           </div>
@@ -77,13 +73,10 @@ export default function Appointments() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl mb-12 grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="bg-white p-8 rounded-2xl shadow-xl mb-12 grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2"
-            >
+            <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-2">
               Date
             </label>
             <input
@@ -91,16 +84,12 @@ export default function Appointments() {
               id="date"
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
-              className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
+              className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
               required
-              aria-required="true"
             />
           </div>
           <div>
-            <label
-              htmlFor="time"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2"
-            >
+            <label htmlFor="time" className="block text-sm font-semibold text-gray-700 mb-2">
               Time
             </label>
             <input
@@ -108,25 +97,20 @@ export default function Appointments() {
               id="time"
               value={form.time}
               onChange={(e) => setForm({ ...form, time: e.target.value })}
-              className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
+              className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
               required
-              aria-required="true"
             />
           </div>
           <div>
-            <label
-              htmlFor="doctorId"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2"
-            >
+            <label htmlFor="doctorId" className="block text-sm font-semibold text-gray-700 mb-2">
               Doctor
             </label>
             <select
               id="doctorId"
               value={form.doctorId}
               onChange={(e) => setForm({ ...form, doctorId: e.target.value })}
-              className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
+              className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
               required
-              aria-required="true"
             >
               <option value="">Select Doctor</option>
               {doctors.map((doc) => (
@@ -137,19 +121,15 @@ export default function Appointments() {
             </select>
           </div>
           <div>
-            <label
-              htmlFor="patientId"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2"
-            >
+            <label htmlFor="patientId" className="block text-sm font-semibold text-gray-700 mb-2">
               Patient
             </label>
             <select
               id="patientId"
               value={form.patientId}
               onChange={(e) => setForm({ ...form, patientId: e.target.value })}
-              className="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
+              className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition duration-200"
               required
-              aria-required="true"
             >
               <option value="">Select Patient</option>
               {patients.map((pat) => (
@@ -162,42 +142,40 @@ export default function Appointments() {
           <button
             type="submit"
             className="col-span-1 md:col-span-2 flex items-center justify-center w-full md:w-auto px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg hover:from-teal-600 hover:to-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition duration-200 shadow-md"
-            aria-label="Add Appointment"
           >
             <FaCalendarPlus className="mr-2 text-lg" />
             Add Appointment
           </button>
         </form>
 
-        <h3 className="text-2xl font-semibold text-teal-700 dark:text-teal-300 mb-8">
+        <h3 className="text-2xl font-semibold text-teal-700 mb-8">
           Scheduled Appointments
         </h3>
         <div className="space-y-4">
           {appointments.length === 0 && (
-            <p className="text-gray-500 dark:text-gray-400 text-center text-lg font-medium">
+            <p className="text-gray-500 text-center text-lg font-medium">
               No appointments scheduled yet.
             </p>
           )}
           {appointments.map((appt) => (
             <div
               key={appt.id}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex justify-between items-center hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
+              className="bg-white rounded-2xl shadow-lg p-6 flex justify-between items-center hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
             >
               <div className="space-y-1">
-                <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                <p className="text-sm font-semibold text-gray-700">
                   <strong>Date:</strong> {new Date(appt.date).toLocaleDateString()} @ {appt.time}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-gray-600">
                   <strong>Doctor:</strong> {appt.doctorName}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-gray-600">
                   <strong>Patient:</strong> {appt.patientName}
                 </p>
               </div>
               <button
                 onClick={() => handleDelete(appt.id)}
-                className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200"
-                aria-label={`Delete appointment for ${appt.patientName} with ${appt.doctorName}`}
+                className="flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200"
               >
                 <FaTrash className="mr-2" />
                 Delete
